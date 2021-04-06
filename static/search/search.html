@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link
+            rel="stylesheet"
+            type="text/css"
+            href="//fonts.googleapis.com/css?family=Open+Sans&display=swap"
+        />
+        <link rel="stylesheet" href="theme.css" />
+        <link rel="stylesheet" href="/search/search.css" />
+        <script src="/search/tools.js"></script>
+        <title>Seach</title>
+    </head>
+    <body>
+        <header>
+            <h1>Search</h1>
+            <p id="page-description" style="display: none"></p>
+            <nav>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/search">Search</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <main>
+            <section class="search-box">
+                <label for="search">Query:</label>
+                <input
+                    tabindex="1"
+                    type="text"
+                    name="searchQuery"
+                    id="search"
+                    placeholder="tag:TAG1 AND title:Some AND 'exact match'"
+                    value=""
+                />
+                <a id="search-link" tabindex="2" href="/">Let me win</a>
+            </section>
+            <section id="results-box"></section>
+        </main>
+        <script src="/search/search.js"></script>
+    </body>
+</html>

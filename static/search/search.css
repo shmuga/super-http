@@ -1,0 +1,47 @@
+.search-box {
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  margin: 20px 10px 10px 10px;
+}
+
+.search-box label {
+  margin-right: 20px;
+}
+
+.search-box input {
+  margin-right: 20px;
+  border: none;
+  border-bottom: 1px solid #ddd;
+  padding: 5px;
+  flex: 10;
+  font-size: 16px;
+}
+
+.search-box button {
+  border: none;
+  padding: 5px 10px;
+  font-size: 16px;
+}
+
+.result-body {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 120px;
+  margin-bottom: 10px;
+}
+
+.result-tags {
+  display: flex;
+}
+
+.result-tags .tag {
+  margin-right: 5px;
+}
+
+.result-subtitle {
+  display: block;
+  color: #000;
+  margin-top: -10px;
+  margin-bottom: 10px;
+}
