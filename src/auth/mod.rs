@@ -4,7 +4,7 @@ use sha2::{Digest, Sha256};
 use actix_web_httpauth::extractors::basic::BasicAuth;
 use std::env;
 
-fn get_hash(password: &String, salt: &String) -> String {
+fn get_hash(password: &str, salt: &str) -> String {
     let mut hasher = Sha256::new();
     let salted_password = format!("{}/{}", password, salt);
     hasher.update(salted_password);
@@ -53,18 +53,18 @@ impl EnvAuth {
         }
     }
 
-    pub fn generate_signature(
-        self,
-        link: String,
-    ) -> String {
-        get_hash(&format!("{}/{}", link, self.password), &self.salt)
-    }
+//     pub fn generate_signature(
+//         self,
+//         link: String,
+//     ) -> String {
+//         get_hash(&format!("{}/{}", link, self.password), &self.salt)
+//     }
 
-    pub fn check_signature(
-        self,
-        link: String,
-        signature: String
-    ) -> bool {
-        self.generate_signature(link) == signature
-    }
+//     pub fn check_signature(
+//         self,
+//         link: String,
+//         signature: String
+//     ) -> bool {
+//         self.generate_signature(link) == signature
+//     }
 }

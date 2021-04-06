@@ -3,7 +3,7 @@ use std::hash::Hash;
 use std::hash::Hasher;
 use url::{ParseError, Url};
 
-#[derive(Eq, PartialEq, Debug, Clone, Serialize, Deserialize)]
+#[derive(Eq, Debug, Clone, Serialize, Deserialize)]
 pub struct Link {
     pub title: String,
     pub href: String,
@@ -12,7 +12,7 @@ pub struct Link {
 
 impl Link {
     pub fn new(base: Option<String>, href: String, title: String) -> Self {
-        let base = base.unwrap_or("/".to_string());
+        let base = base.unwrap_or_else(|| "/".to_string());
         let host = format!("https://localhost{}", base);
 
         match Url::parse(&href) {
@@ -21,7 +21,7 @@ impl Link {
                 href: Url::parse(&host)
                     .and_then(|u| u.join(&href))
                     .map(|u| u.path().to_string())
-                    .unwrap_or("PARSING_ERROR".to_string()),
+                    .unwrap_or_else(|_| "PARSING_ERROR".to_string()),
                 is_external: false,
             },
             _ => Link {
@@ -30,6 +30,12 @@ impl Link {
                 is_external: true,
             },
         }
+    }
+}
+
+impl PartialEq for Link {
+    fn eq(&self, other: &Link) -> bool {
+        self.href.eq(&other.href)
     }
 }
 
@@ -58,7 +64,7 @@ impl Default for LinksStorage {
 
 fn derive_filename(from: &Link) -> Option<String> {
     if let Ok(parsed) = Url::parse(&from.href) {
-        if let Some(_) = parsed.host() {
+        if parsed.host().is_none() {
             None
         } else {
             Some(parsed.path().to_owned())
@@ -93,7 +99,7 @@ impl LinksStorage {
         let to_add: HashSet<_> = links.iter().cloned().collect();
 
         // for each one missing in to_add -> remove backlinks
-        for removed_link in forward.difference(&to_add.clone()) {
+        for removed_link in forward.difference(&to_add) {
             if !removed_link.is_external {
                 if let Some(backlink) = self.backward.get_mut(&removed_link.href) {
                     backlink.take(&removed_link);
@@ -102,7 +108,7 @@ impl LinksStorage {
         }
 
         // for each one new link in to_add -> add backlinks
-        for added_link in to_add.clone().difference(&forward) {
+        for added_link in to_add.difference(&forward) {
             if !added_link.is_external {
                 match self.backward.get_mut(&added_link.href) {
                     Some(backlink) => {
@@ -118,7 +124,7 @@ impl LinksStorage {
         }
 
         self.files.insert(source.clone());
-        self.forward.insert(source.href.clone(), to_add.clone());
+        self.forward.insert(source.href, to_add);
     }
 }
 

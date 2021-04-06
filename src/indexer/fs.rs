@@ -17,6 +17,6 @@ pub fn walk(path: String) -> Result<Vec<String>, std::io::Error> {
     Ok(res)
 }
 
-pub fn file(path: &String) -> Result<String, std::io::Error> {
-    Ok(fs::read_to_string(path)?)
+pub fn file(path: &str) -> Result<String, std::io::Error> {
+    fs::read_to_string(path)
 }

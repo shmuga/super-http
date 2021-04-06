@@ -1,11 +1,10 @@
-use log::info;
 use url::Url;
 use crate::indexer::links_storage::Link;
 use crate::indexer::HtmlIndexer;
 use crate::prelude::*;
 use actix::prelude::*;
 use actix::Message;
-use serde_json::{Value};
+use serde_json::Value;
 
 #[derive(Message)]
 #[rtype(result = "Result<Value>")]
@@ -17,7 +16,7 @@ impl Handler<GetForward> for HtmlIndexer {
     fn handle(&mut self, msg: GetForward, _ctx: &mut Self::Context) -> Self::Result {
         let path = Url::parse(&msg.0)
                     .map(|u| u.path().to_string())
-                    .unwrap_or("/".to_string());
+                    .unwrap_or_else(|_| "/".to_string());
 
         let links = self
             .0
@@ -39,7 +38,7 @@ impl Handler<GetBackward> for HtmlIndexer {
     fn handle(&mut self, msg: GetBackward, _ctx: &mut Self::Context) -> Self::Result {
         let path = Url::parse(&msg.0)
                     .map(|u| u.path().to_string())
-                    .unwrap_or("/".to_string());
+                    .unwrap_or_else(|_| "/".to_string());
 
         let links = self
             .0

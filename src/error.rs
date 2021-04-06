@@ -8,16 +8,16 @@ use std::convert::From;
 #[derive(Fail, Debug)]
 pub enum Error {
     // 401
-    #[fail(display = "Unauthorized")]
-    Unauthorized,
+    // #[fail(display = "Unauthorized")]
+    // Unauthorized,
 
     // 403
-    #[fail(display = "Forbidden")]
-    Forbidden,
+    // #[fail(display = "Forbidden")]
+    // Forbidden,
 
     // 404
-    #[fail(display = "Not Found")]
-    NotFound,
+    // #[fail(display = "Not Found")]
+    // NotFound,
 
     // 422
     #[fail(display = "Unprocessable Entity")]

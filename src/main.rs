@@ -3,10 +3,6 @@ extern crate tantivy;
 #[macro_use]
 extern crate failure;
 #[macro_use]
-extern crate actix_files;
-#[macro_use]
-extern crate actix_web;
-#[macro_use]
 extern crate lazy_static;
 
 use crate::indexer::parser::ParsedFile;
@@ -29,7 +25,7 @@ mod prelude;
 
 #[get("/link/forward/{link}")]
 async fn forward_link(
-    web::Path((link)): web::Path<(String)>,
+    web::Path(link): web::Path<String>,
     addr: web::Data<Addr<HtmlIndexer>>,
 ) -> impl Responder {
     let url = urlencoding::decode(&link).unwrap();
@@ -42,7 +38,7 @@ async fn forward_link(
 
 #[get("/link/backward/{link}")]
 async fn backward_link(
-    web::Path((link)): web::Path<(String)>,
+    web::Path(link): web::Path<String>,
     addr: web::Data<Addr<HtmlIndexer>>,
 ) -> impl Responder {
     let url = urlencoding::decode(&link).unwrap();
@@ -55,7 +51,7 @@ async fn backward_link(
 
 #[get("/search/{q}")]
 async fn search(
-    web::Path((q)): web::Path<(String)>,
+    web::Path(q): web::Path<String>,
     addr: web::Data<Addr<HtmlIndexer>>,
 ) -> impl Responder {
     let result = addr.send(indexer::handlers::SearchAll(q.clone())).await;
@@ -69,9 +65,9 @@ async fn search(
 async fn main() -> std::io::Result<()> {
     let opts = crate::cli::get_opts();
     let env_path = Path::new(&opts.input).join("./.env");
-    dotenv::from_path(env_path.as_path());
+    dotenv::from_path(env_path.as_path()).unwrap();
 
-    let port = env::var("PORT").unwrap_or(
+    let port = env::var("PORT").unwrap_or_else(|_|
         portpicker::pick_unused_port()
             .expect("No ports free")
             .to_string(),
