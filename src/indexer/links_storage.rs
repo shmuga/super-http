@@ -48,8 +48,8 @@ impl Hash for Link {
 #[derive(Debug, Serialize, Deserialize)]
 pub struct LinksStorage {
     pub files: HashSet<Link>,
-    forward: HashMap<String, HashSet<Link>>,
-    backward: HashMap<String, HashSet<Link>>,
+    pub forward: HashMap<String, HashSet<Link>>,
+    pub backward: HashMap<String, HashSet<Link>>,
 }
 
 impl Default for LinksStorage {

@@ -24,7 +24,7 @@ impl Handler<GetForward> for HtmlIndexer {
             .get_forward(Link::new(None, path, String::new()));
 
         // FIXME: remove unwrap
-        Ok(serde_json::to_value(links).unwrap())
+        Ok(serde_json::to_value(&links).unwrap())
     }
 }
 
@@ -44,6 +44,23 @@ impl Handler<GetBackward> for HtmlIndexer {
             .0
             .links_storage
             .get_backward(Link::new(None, path, String::new()));
+
+        // FIXME: remove unwrap
+        Ok(serde_json::to_value(&links).unwrap())
+    }
+}
+
+#[derive(Message)]
+#[rtype(result = "Result<Value>")]
+pub struct GetAll();
+
+impl Handler<GetAll> for HtmlIndexer {
+    type Result = Result<Value>;
+
+    fn handle(&mut self, msg: GetAll, _ctx: &mut Self::Context) -> Self::Result {
+        let links = serde_json::to_value(&self
+            .0
+            .links_storage).unwrap();
 
         // FIXME: remove unwrap
         Ok(serde_json::to_value(links).unwrap())

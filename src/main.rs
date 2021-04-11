@@ -23,6 +23,17 @@ mod error;
 mod indexer;
 mod prelude;
 
+#[get("/link/all")]
+async fn all_links(
+    addr: web::Data<Addr<HtmlIndexer>>,
+) -> impl Responder {
+    let result = addr.send(indexer::handlers::GetAll()).await;
+    let links = result.unwrap().unwrap();
+    HttpResponse::Ok()
+        .content_type("application/json")
+        .json(links)
+}
+
 #[get("/link/forward/{link}")]
 async fn forward_link(
     web::Path(link): web::Path<String>,
@@ -94,6 +105,7 @@ async fn main() -> std::io::Result<()> {
                 web::scope("/api")
                     .data(addr.clone())
                     .service(search)
+                    .service(all_links)
                     .service(forward_link)
                     .service(backward_link)
                     .wrap(auth.clone())
